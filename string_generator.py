@@ -34,7 +34,7 @@ class StringGenerator(ABC):
             for l_ in range(min_len, max_len):
                 num_accept = 0
                 num_reject = 0
-                while num_accept < n and num_reject < n:
+                while num_accept < n or num_reject < n:
                     string = self.sep.join(random.choices(self.alphabet, k=l_))
                     accept = self.classify(string)
                     if (accept and num_accept < n) or \
