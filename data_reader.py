@@ -23,7 +23,6 @@ def load_data(filename: str, alphabet: Alphabet = ("a", "b", "c", "d"),
     with open(filename, "r") as f:
         all_data = [line.strip().split(colsep) for line in f]
 
-    print(len(all_data))
     all_xs = [str_to_idx(x, alphabet=alphabet, sep=sep) for x, _ in all_data]
     all_ys = [int(y == "True") for _, y in all_data]
     del all_data
@@ -31,7 +30,6 @@ def load_data(filename: str, alphabet: Alphabet = ("a", "b", "c", "d"),
     # Split into batches
     pointer = 0
     for i in range(num_batches):
-        print(i, pointer, sep=":")
         xs = all_xs[pointer:pointer + batch_size]
         ys = all_ys[pointer:pointer + batch_size]
         pointer += batch_size
