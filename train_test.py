@@ -48,6 +48,6 @@ def test_model(model: PANNAcceptor, data, dev: bool = False):
 
 
 if __name__ == "__main__":
-    model = PANNAcceptor(4, 5)
-    train_data = load_data("data/ea_train.txt", batch_size=10)
+    model = PANNAcceptor(4, 8)
+    train_data = load_data("data/ea_train_short.txt", batch_size=10)
     train_model(model, train_data)

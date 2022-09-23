@@ -29,7 +29,7 @@ class PANNCell(nn.RNNCellBase):
         if h is None:
             h = F.one_hot(torch.zeros(len(x), dtype=torch.long),
                           num_classes=self.num_states).float()
-        return (self.weight[x] @ h.unsqueeze(-1)).squeeze(-1)
+        return (self.weight[x].softmax(-1) @ h.unsqueeze(-1)).squeeze(-1)
 
 
 class PANNAcceptor(nn.Module):
