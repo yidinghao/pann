@@ -60,8 +60,31 @@ class PANNAcceptor(nn.Module):
         return self.linear(hs[range(len(hs)), :, lengths - 1])
 
 
+class SRNAcceptor(nn.Module):
+    def __init__(self, alphabet_size: int, hidden_size: int, **kwargs):
+        super(SRNAcceptor, self).__init__()
+        self.alphabet_size = alphabet_size
+        self.srn = nn.RNN(input_size=alphabet_size, hidden_size=hidden_size,
+                          nonlinearity="relu", batch_first=True, **kwargs)
+        self.linear = nn.Linear(hidden_size, 2)
+
+    def forward(self, xs: torch.LongTensor, lengths: torch.LongTensor) -> \
+            torch.FloatTensor:
+        """
+        Classifies a batch of strings.
+
+        :param xs: A batch of strings [batch_size, max_length]
+        :param lengths: The length of each string in the batch
+            [batch_size,]
+        :return: The predictions, where 1 means accept and 0 means
+            reject [batch_size, 2]
+        """
+        hs, _ = self.srn(F.one_hot(xs, num_classes=self.alphabet_size).float())
+        return self.linear(hs[range(len(hs)), lengths - 1, :])
+
+
 if __name__ == "__main__":
-    model = PANNAcceptor(3, 5)
+    model = SRNAcceptor(3, 5)
     xs_ = torch.randint(3, (7, 6))
     lengths_ = torch.randint(6, (7,))
     print(model(xs_, lengths_))
